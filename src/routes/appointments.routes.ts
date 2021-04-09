@@ -1,14 +1,8 @@
 import { Router } from 'express';
-import { v4 as uuid } from 'uuid';
 import { startOfHour, parseISO, isEqual } from 'date-fns';
+import Appointment from '../models/Appointments';
 
 const appointmentsRouter = Router();
-
-interface Appointment {
-  id: string;
-  provider: string;
-  date: Date;
-}
 
 //Definindo a Tipagem dos Appointments
 const appointments: Appointment[] = [];
@@ -29,13 +23,10 @@ appointmentsRouter.post('/', async (request, response) => {
     });
   }
 
-  const appointment = {
-    id: uuid(),
-    provider,
-    date: parsedDate,
-  };
+  const appointment = new Appointment(provider, parsedDate);
 
   appointments.push(appointment);
   return response.json(appointment);
 });
+
 export default appointmentsRouter;
